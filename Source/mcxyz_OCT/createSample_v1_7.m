@@ -10,17 +10,17 @@ home
 SAVEON      = 1;        % 1 = save myname_T.bin, myname_H.mci 
                         % 0 = don't save. Just check the program.
 
-myname      = '6_1_A';% name for files: myname_T.bin, myname_H.mci  
+myname      = '6_1_Compare';% name for files: myname_T.bin, myname_H.mci  
 time_min    = 10;      	% time duration of the simulation [min] <----- run time -----
-Nx          = 1000;        % # of bins in each dimension of cube
-Ny          = 1000;        % # of bins in each dimension of cube
-Nz          = 1000;        % # of bins in each dimension of cube
-binsize     = 0.003;     	% size of each bin, eg. [cm]
+Nx          = 1;        % # of bins in each dimension of cube
+Ny          = 1;        % # of bins in each dimension of cube
+Nz          = 1;        % # of bins in each dimension of cube
+binsize     = 0.7;     	% size of each bin, eg. [cm]
 
 % Set Monte Carlo launch flags (not in use)
-mcflag      = 0;     	% launch: 0 = uniform beam, 1 = Gaussian, 2 = isotropic pt. 
+mcflag      = 1;     	% launch: 0 = uniform beam, 1 = Gaussian, 2 = isotropic pt. 
                         % 3 = rectangular beam (use xfocus,yfocus for x,y halfwidths)
-launchflag  = 1;        % 0 = let mcxyz.c calculate launch trajectory
+launchflag  = 0;        % 0 = let mcxyz.c calculate launch trajectory
                         % 1 = manually set launch vector.
 boundaryflag = 1;       % 0 = no boundaries, 1 = escape at boundaries
                         % 2 = escape at surface only. No x, y, bottom z
@@ -49,7 +49,7 @@ cos_accept  = cos(atan(beamw/2/flens)); % Cos of the accepted angle
 lambda = 1310e-7; % in cm
 f = flens; 
 D = beamw;
-%z_f_img = -0.5
+z_f_img = -0.5;
 h_step = 1e-4;
 %%
 %Calculate beam width at the sample's surface
@@ -63,7 +63,7 @@ sigma_surf = 2 * w_surf;            %Sigma of the gaussian distribution of the l
                          
 if mcflag == 0 
     det_radius  = 1310e-7*2/pi/atan(beamw/2/flens);    
-elseif mclfag == 2
+elseif mcflag == 2
     det_radius  = 1310e-7*2/pi/atan(beamw/2/flens);   
 elseif mcflag == 3
     det_radius  = 1310e-7*2/pi/atan(beamw/2/flens);   
@@ -103,12 +103,12 @@ Nt = 1; %Number if layers
 muav(1) = 1.18e-1;    %Absorption coef. of first layer
 %muav(1) = 1.91e-13;    %Absorption coef. of first layer
 
-% musv(1) = 10;   %Scattering coef. of first layer
+musv(1) = 1;   %Scattering coef. of first layer
 gv(1) = 0.5;     %Anisotropy of first layer
 %nrv(1) = 1.4409;      %Refraction index of first layer
 nrv(1) = 1;   
-mua = 2.55e0 * (1-gv(1));
-musv(1) = mua/(1-gv(1));       %Change reduced scattering in scattering
+%mua = 2.55e0 * (1-gv(1));
+%musv(1) = mua/(1-gv(1));       %Change reduced scattering in scattering
 % muav(2) = 0.1;    %Absorption coef. of first layer
 % musv(2) = 1000;   %Scattering coef. of first layer
 % gv(2) = 0.7;     %Anisotropy of first layer
@@ -185,9 +185,9 @@ if SAVEON
         fprintf(fid,'%0.4f\n',radius);
         fprintf(fid,'%0.4f\n',waist);
         fprintf(fid,'%0.4f\n',zsurf);
-        %fprintf(fid,'%0.4f\n',x_start);
-        %fprintf(fid,'%0.4f\n',y_start);
-        %fprintf(fid,'%0.8f\n',z_start);
+        fprintf(fid,'%0.4f\n',x_start);
+        fprintf(fid,'%0.4f\n',y_start);
+        fprintf(fid,'%0.8f\n',z_start);
         % tissue optical properties
         fprintf(fid,'%d\n',Nt);
         for i=1:Nt
